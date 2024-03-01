@@ -9,8 +9,8 @@
 # <xbar.image>https://i.imgur.com/0tY2che.png</xbar.image>
 # <xbar.dependencies>python2, urllib, feedparser, termcolor</xbar.dependencies>
 
-# Plugin Version: v3.0
-# Last Update: 2024-02-10
+# Plugin Version: v3.0.1
+# Last Update: 2024-03-01
 # Plugin Link: https://github.com/Gea97/arXiv-MenuBar-Mac-xbar
 
 # You can change the default refresh time changing the plugin name with format "001-arXiv.<time>.py", for example "001-arXiv.5m.py" sets the refresh time to 5 minutes
@@ -53,7 +53,6 @@ from termcolor import colored
 # N.B. if you search for only one keyword you can use either "AND" or "OR", the function the same in this case
 # If you put only 1 entry, or 1 entry + a category you can omit it
 # The last entry is a list that has to be 1 if you want the corresponding (i.e. in the same position) word to be displayed
-
 
 Keywords = [
     [0,  3,    "submittedDate",   "descending",  "all:%22Black+Holes%22", "all:%22Black+Hole%22",                                                     [0, "OR", "OR"],                [1 ,0]],
@@ -671,8 +670,8 @@ def main():
                             EntryTitleIcon = TitlesNewestIcon
                         elif (CurrentDay == 1):                                                                                         #check if it's the first day of the month
                             if (CheckNew == [1, -11, -30]):                                                                             #1st January and 31th December
-                                EntryTitleIcon=TitlesNewestIcon
-                            elif  (CheckNew == [0, -1, NumberOfDays(CurrentYear, CurrentMonth-1)]):                                     #1st of the Month and last of the previous
+                                EntryTitleIcon = TitlesNewestIcon
+                            elif  (CheckNew == [0, 1, -NumberOfDays(CurrentYear, CurrentMonth-1) + 1]):                                     #1st of the Month and last of the previous
                                 EntryTitleIcon = TitlesNewestIcon
 
                     if((TitlesWeekIconVar[2] == 1)):
@@ -728,7 +727,7 @@ def main():
                                     EntryTitleIcon = TitlesUpdatedWeekIcon
                         elif ((CheckUpdated[0] == 1) and (CurrentMonth == 1) and (CheckUpdated[1] == -11) and (CheckUpdated[2] >= CurrentDay - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysUpdatedWeek)):
                                     EntryTitleIcon = TitlesUpdatedWeekIcon                
-                    
+
                     #Title
                     try:
                         Title=Correct(entry.title).encode('utf-8').rsplit("\n ")
@@ -827,7 +826,8 @@ def main():
 
                     # Print Affiliation
                     try:
-                        print ( "{} {} Affiliation: {}| href={}".format(Nesting(2), Indentation(2), entry.arxiv_affiliation, ABSurl).replace("\n","") )
+                        print ( "{} {} Affiliation: {}| href={}".format(Nesting(2), Indentation(2), Correct(entry.arxiv_affiliation).encode('utf-8').replace("\n",""), ABSurl)
+                        )
                     except AttributeError:
                         pass
 
@@ -858,7 +858,6 @@ def main():
                     except AttributeError:
                         print ( "{} {} Link PDF: {}| href={}".format(Nesting(2), Indentation(2), 'No PDF Found'.replace("\n",""), ABSurl)
                         )                      
-
 
         if (DisplayOrder[order] == "FrontPage"):
             # arXiv Front Page
