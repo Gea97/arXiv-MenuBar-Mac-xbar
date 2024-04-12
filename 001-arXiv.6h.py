@@ -9,8 +9,8 @@
 # <xbar.image>https://i.imgur.com/0tY2che.png</xbar.image>
 # <xbar.dependencies>python2, urllib, feedparser, termcolor</xbar.dependencies>
 
-# Plugin Version: v3.0.1
-# Last Update: 2024-03-01
+# Plugin Version: v3.1
+# Last Update: 2024-04-12
 # Plugin Link: https://github.com/Gea97/arXiv-MenuBar-Mac-xbar
 
 # You can change the default refresh time changing the plugin name with format "001-arXiv.<time>.py", for example "001-arXiv.5m.py" sets the refresh time to 5 minutes
@@ -26,11 +26,15 @@
 """
 python2 -m pip install feedparser==5.2.1
 python2 -m pip install termcolor
+python2 -m pip install bs4
+python2 -m pip install requests
 """
 
 import urllib
 import feedparser
 from termcolor import colored
+from bs4 import BeautifulSoup
+import requests
 
 # Set Keywords
 # To search for phrases use the pattern "%22 Word1 + Word2 %22", without spaces, i.e. like "%22Black+Holes%22" will search for "Black Holes"
@@ -907,8 +911,16 @@ def main():
             # Print out Feed Last Updated Information
             print(Nesting(3))
             if (DisplayFeed == 1):
+                arXiv_physics_url = 'https://arxiv.org/list/physics/new'
+                resp = requests.get(arXiv_physics_url)
+                resp_html = resp.text
+                soup = BeautifulSoup(resp_html, "html.parser")
+                soup1 = soup.body.get_text().strip()
+                soup2 = soup1[349:434].replace(",", " ").replace("  ", " ")
+
                 response = urllib.urlopen(base_API_url).read()
                 feed = feedparser.parse(response)
-                print ("{} Feed Last Updated: {} | href={}".format(FeedIcon, feed.feed.updated, arXiv_url) )
+
+                print ("{} Feed Last Updated: {} - {} | href={}".format(FeedIcon, feed.feed.updated , soup2, arXiv_physics_url) )
 
 main()
