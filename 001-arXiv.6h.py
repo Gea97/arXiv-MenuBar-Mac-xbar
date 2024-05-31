@@ -9,8 +9,8 @@
 # <xbar.image>https://i.imgur.com/0tY2che.png</xbar.image>
 # <xbar.dependencies>python2, urllib, feedparser, termcolor</xbar.dependencies>
 
-# Plugin Version: v3.1
-# Last Update: 2024-04-12
+# Plugin Version: v3.2.5
+# Last Update: 2024-05-31
 # Plugin Link: https://github.com/Gea97/arXiv-MenuBar-Mac-xbar
 
 # You can change the default refresh time changing the plugin name with format "001-arXiv.<time>.py", for example "001-arXiv.5m.py" sets the refresh time to 5 minutes
@@ -910,16 +910,38 @@ def main():
         if (DisplayOrder[order] == "Feed"):
             # Print out Feed Last Updated Information
             print(Nesting(3))
+
             if (DisplayFeed == 1):
                 arXiv_physics_url = 'https://arxiv.org/list/physics/new'
-                resp = requests.get(arXiv_physics_url)
-                resp_html = resp.text
-                soup = BeautifulSoup(resp_html, "html.parser")
-                soup1 = soup.body.get_text().strip()
-                soup2 = soup1[349:434].replace(",", " ").replace("  ", " ")
-
                 response = urllib.urlopen(base_API_url).read()
                 feed = feedparser.parse(response)
+
+                CurrentYearFeed=str(feed.feed.updated_parsed[0])
+
+                search_text = "New submissions for"
+                
+                try:
+                    # Fetch the website content
+                    resp = requests.get(arXiv_physics_url)
+                    resp.raise_for_status()  # Check for request errors
+                
+                    # Parse the HTML content using BeautifulSoup
+                    soup = BeautifulSoup(resp.content, 'html.parser')
+
+                    # Find the text  in the HTML content
+                    page_text = soup.get_text()
+                    index = page_text.find(search_text)
+                    index2 = page_text.find(search_text)
+
+                    if index != -1:
+                        # Print the following 150 characters
+                        soup2A = page_text[index:index+len(search_text)+100]
+                        index2 = soup2A.find(CurrentYearFeed)
+                        soup2 = page_text[index:index+index2+4]
+                    else:
+                        soup2 = "Text -New submissions for- not found on the website"
+                except AttributeError:
+                    soup2 = "An error occurred while fetching the website"
 
                 print ("{} Feed Last Updated: {} - {} | href={}".format(FeedIcon, feed.feed.updated , soup2, arXiv_physics_url) )
 
