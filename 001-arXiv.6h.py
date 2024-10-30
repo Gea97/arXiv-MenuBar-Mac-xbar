@@ -9,8 +9,8 @@
 # <xbar.image>https://i.imgur.com/0tY2che.png</xbar.image>
 # <xbar.dependencies>python2, urllib, feedparser, termcolor</xbar.dependencies>
 
-# Plugin Version: v3.2.5
-# Last Update: 2024-05-31
+# Plugin Version: v3.3.0
+# Last Update: 2024-10-30
 # Plugin Link: https://github.com/Gea97/arXiv-MenuBar-Mac-xbar
 
 # You can change the default refresh time changing the plugin name with format "001-arXiv.<time>.py", for example "001-arXiv.5m.py" sets the refresh time to 5 minutes
@@ -129,9 +129,9 @@ elif ((DisplayNew != 1) and (DisplayUpdated != 1)):
 
 # Set number of days considered new for colored icons
 DaysNew          =  7
-DaysWeekNew      = 15
+DaysWeekNew      = 21
 DaysUpdatedWeek  =  7
-DaysUpdatedMonth = 15
+DaysUpdatedMonth = 28
 
 # If you want the icon put 1 in the first entry, 0 otherwise
 # Then choose the color
@@ -918,30 +918,59 @@ def main():
 
                 CurrentYearFeed=str(feed.feed.updated_parsed[0])
 
-                search_text = "New submissions for"
-                
-                try:
-                    # Fetch the website content
-                    resp = requests.get(arXiv_physics_url)
-                    resp.raise_for_status()  # Check for request errors
-                
-                    # Parse the HTML content using BeautifulSoup
-                    soup = BeautifulSoup(resp.content, 'html.parser')
+                control = 0
+                end_search = 4
+                search_text0 = ["listings", "submissions"]
 
-                    # Find the text  in the HTML content
-                    page_text = soup.get_text()
-                    index = page_text.find(search_text)
-                    index2 = page_text.find(search_text)
+                for s in range(0, len(search_text0)):
+                    search_text = "New "+search_text0[s]+" for"
+                    try:
+                        # Fetch the website content
+                        resp = requests.get(arXiv_physics_url)
+                        resp.raise_for_status()  # Check for request errors
+                
+                        # Parse the HTML content using BeautifulSoup
+                        soup = BeautifulSoup(resp.content, 'html.parser')
 
-                    if index != -1:
-                        # Print the following 150 characters
-                        soup2A = page_text[index:index+len(search_text)+100]
-                        index2 = soup2A.find(CurrentYearFeed)
-                        soup2 = page_text[index:index+index2+4]
-                    else:
-                        soup2 = "Text -New submissions for- not found on the website"
-                except AttributeError:
-                    soup2 = "An error occurred while fetching the website"
+                        # Find the text  in the HTML content
+                        page_text = soup.get_text()
+                        index = page_text.find(search_text)
+                        index2 = page_text.find(search_text)
+
+                        if index != -1:
+                            # Print the following 150 characters
+                            soup2A = page_text[index:index+len(search_text)+100]
+                            index2 = soup2A.find(CurrentYearFeed)
+                            soup2 = page_text[index:index+index2+end_search]
+                            control = 1
+                    except AttributeError:
+                        soup2 = "An error occurred while fetching the website"
+
+                for s in range(0, len(search_text0)):
+                    search_text = "new "+search_text0[s]+" for"
+                    try:
+                        # Fetch the website content
+                        resp = requests.get(arXiv_physics_url)
+                        resp.raise_for_status()  # Check for request errors
+                
+                        # Parse the HTML content using BeautifulSoup
+                        soup = BeautifulSoup(resp.content, 'html.parser')
+
+                        # Find the text  in the HTML content
+                        page_text = soup.get_text()
+                        index = page_text.find(search_text)
+                        index2 = page_text.find(search_text)
+
+                        if index != -1:
+                            # Print the following 150 characters
+                            soup2A = page_text[index:index+len(search_text)+100]
+                            index2 = soup2A.find(CurrentYearFeed)
+                            soup2 = "New "+page_text[index+4:index+index2+end_search]
+                            control = 1
+                    except AttributeError:
+                        soup2 = "An error occurred while fetching the website"
+                if control == 0:
+                    soup2 = "An error occurred while fetching the submission date"
 
                 print ("{} Feed Last Updated: {} - {} | href={}".format(FeedIcon, feed.feed.updated , soup2, arXiv_physics_url) )
 
