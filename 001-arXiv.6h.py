@@ -10,7 +10,7 @@
 # <xbar.dependencies>python2, urllib, feedparser, termcolor</xbar.dependencies>
 
 # Plugin Version: v4.0.0
-# Last Update: 2025-01-02
+# Last Update: 2025-01-05
 # Plugin Link: https://github.com/Gea97/arXiv-MenuBar-Mac-xbar
 
 # You can change the default refresh time changing the plugin name with format "001-arXiv.<time>.py", for example "001-arXiv.5m.py" sets the refresh time to 5 minutes
@@ -653,7 +653,7 @@ def main():
                             elif (CheckNew[1] == 1):                                                                                  #check if previous month
                                 if((CheckNew[2] <= 0) and (CheckNew[2] <= - NumberOfDays(CurrentYear, CurrentMonth-1) + DaysWeekNew)):                                                     
                                     EntryTitleIcon = TitlesWeekIcon
-                        elif ((CheckNew[0] == 1) and (CurrentMonth == 1) and (CheckNew[1] == -11) and (CheckNew[2] <= CurrentDay - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysWeekNew)):
+                        elif ((CheckNew[0] == 1) and (CurrentMonth == 1) and (CheckNew[1] == -11) and (CheckNew[2] <= - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysWeekNew)):
                                     EntryTitleIcon = TitlesWeekIcon
 
                     if((TitlesNewIconVar[2] == 1)):                                                                                   #Icon for articles in the previous DaysNew days
@@ -664,7 +664,7 @@ def main():
                             elif (CheckNew[1] == 1):                                                                                  #check if previous month
                                 if((CheckNew[2] <= 0) and (CheckNew[2] <= - NumberOfDays(CurrentYear, CurrentMonth-1) + DaysNew)):                                                     
                                     EntryTitleIcon = TitlesNewIcon
-                        elif ((CheckNew[0] == 1) and (CurrentMonth == 1) and (CheckNew[1] == -11) and (CheckNew[2] <= CurrentDay - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysNew)):
+                        elif ((CheckNew[0] == 1) and (CurrentMonth == 1) and (CheckNew[1] == -11) and (CheckNew[2] <= - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysNew)):
                                     EntryTitleIcon = TitlesNewIcon 
 
                     if((TitlesNewestIconVar[2] == 1)):
@@ -718,7 +718,7 @@ def main():
                             elif (CheckUpdated[1] == 1):                                                                                                             #check if previous month
                                 if((CheckUpdated[2] <= 0) and (CheckUpdated[2] <= - NumberOfDays(CurrentYear, CurrentMonth-1) + DaysUpdatedMonth)):                                                     
                                     EntryTitleIcon = TitlesUpdatedMonthIcon
-                        elif ((CheckUpdated[0] == 1) and (CurrentMonth == 1) and (CheckUpdated[1] == -11) and (CheckUpdated[2] <= CurrentDay - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysUpdatedMonth)):
+                        elif ((CheckUpdated[0] == 1) and (CurrentMonth == 1) and (CheckUpdated[1] == -11) and (CheckUpdated[2] <= - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysUpdatedMonth)):
                                     EntryTitleIcon = TitlesUpdatedMonthIcon   
 
                     if((TitlesUpdatedWeekIconVar[2] == 1) and (ConditionNewest == 1) and (ConditionNew == 1) and (ConditionCheck == 1)):         #Icon for articles updated in the previous DaysUpdated days
@@ -729,7 +729,7 @@ def main():
                             elif (CheckUpdated[1] == 1):                                                                                         #check if previous month
                                 if((CheckUpdated[2] <= 0) and (CheckUpdated[2] <= - NumberOfDays(CurrentYear, CurrentMonth-1) + DaysUpdatedWeek)):                                                     
                                     EntryTitleIcon = TitlesUpdatedWeekIcon
-                        elif ((CheckUpdated[0] == 1) and (CurrentMonth == 1) and (CheckUpdated[1] == -11) and (CheckUpdated[2] <= CurrentDay - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysUpdatedWeek)):
+                        elif ((CheckUpdated[0] == 1) and (CurrentMonth == 1) and (CheckUpdated[1] == -11) and (CheckUpdated[2] <= - NumberOfDays(CurrentYear-1, CurrentMonth-1) + DaysUpdatedWeek)):
                                     EntryTitleIcon = TitlesUpdatedWeekIcon                
 
                     #Title
