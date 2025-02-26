@@ -9,8 +9,8 @@
 # <xbar.image>https://i.imgur.com/0tY2che.png</xbar.image>
 # <xbar.dependencies>python2, urllib, feedparser, termcolor</xbar.dependencies>
 
-# Plugin Version: v4.0.0
-# Last Update: 2025-01-05
+# Plugin Version: v5.0.0
+# Last Update: 2025-02-26
 # Plugin Link: https://github.com/Gea97/arXiv-MenuBar-Mac-xbar
 
 # You can change the default refresh time changing the plugin name with format "001-arXiv.<time>.py", for example "001-arXiv.5m.py" sets the refresh time to 5 minutes
@@ -65,6 +65,9 @@ Keywords = [
     [0,  4,  "lastUpdatedDate",   "descending",  "cat:gr-qc", "cat:hep-th",                                                                         [0, "AND", "AND"],                [1, 1]],
 ]
 
+Cat = ["gr-qc"]
+# Cat = ["gr-qc", "hep-th"]
+
 # List of NOT allowed characters
 not_allowed_characters = "-"
 
@@ -101,7 +104,7 @@ DateStartFilter = ""
 DateEndFilter = ""
 
 # Choose Display Order, N.B. Feed Last Updated has to be after the results:
-DisplayOrder = ["Results", "FrontPage", "Legend", "Feed"]
+DisplayOrder = ["Results", "FrontPage", "Legend", "Cat", "Feed"]
 
 # Choose if Display the Feed and the Legend, and the Warnings put 1 if you want, 0 otherwise
 DisplayWarnings   =  0         # Put this to -1 if you want to display ony the first link of warning, to -2 if you also want the MenuBar Icon to be a warning, -3 for both things
@@ -152,6 +155,7 @@ LegendIconVar             = [1,                  "yellow",   0,   "⚡︎"]     
 FeedIconVar               = [1,                  "yellow",   1,   "⚡︎"]                               #Feed Icon Colored
 WarningIconVar            = [1,                  "yellow",   1,   "☢︎"]                               #Warning Icon Colored (Es. for no results)
 LinkVar                   = [1,                  "cyan"]                                             #Link Colored
+CatIconVar                = [1,                  "red",      1,   "⚡︎"]                               #Category Icon Colored
 
 # Check if Display condition is satisfied
 if (DisplayNew != 1):
@@ -218,6 +222,14 @@ if ( FrontPageIconVar[0] == 1 ):
         FrontPageIcon = colored(FrontPageIconVar[3], FrontPageIconVar[1], attrs=["bold"])
     else:
         FrontPageIcon = FrontPageIconVar[3]
+else:
+    FrontPageIcon = ""
+
+if ( CatIconVar[0] == 1 ):
+    if ( CatIconVar[2] == 1 ):
+        CatIcon = colored(CatIconVar[3], CatIconVar[1], attrs=["bold"])
+    else:
+        CatIcon = CatIconVar[3]
 else:
     FrontPageIcon = ""
 
@@ -866,9 +878,14 @@ def main():
         if (DisplayOrder[order] == "FrontPage"):
             # arXiv Front Page
             print(Nesting(3))
-            print(
-            "{} arXiv - Front Page | href={}".format(FrontPageIcon, arXiv_url)
-            )
+            print("{} arXiv - Front Page | href={}".format(FrontPageIcon, arXiv_url))
+        
+        if (DisplayOrder[order] == "Cat"):
+            # arXiv Categories
+            if (len(Cat) != 0):
+                for s in range(0, len(Cat)):
+                    print(Nesting(3))
+                    print("{} arXiv - {} | href={}".format(CatIcon, Cat[s], arXiv_url + "/list/" + Cat[s] + "/new"))
 
         if (DisplayOrder[order] == "Legend"):
             # Print out Legend Information
